@@ -479,6 +479,8 @@ export default function Hub({ onNavigate }) {
               onMouseLeave={e => { e.target.style.background="transparent"; e.target.style.boxShadow="0 0 12px rgba(0,255,136,0.15)"; e.target.style.borderColor="rgba(0,255,136,0.3)"; }}>
               ⬡ CLOSER LIVE
             </button>
+            <button
+              onClick={() => onNavigate("setter-live")}
               style={{
                 padding:"9px 18px", fontSize:11, fontWeight:700, letterSpacing:"0.14em",
                 background:"transparent", color:"#FFD700",
