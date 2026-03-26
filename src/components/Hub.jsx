@@ -469,7 +469,7 @@ export default function Hub({ onNavigate }) {
               onClick={() => onNavigate("closer-live")}
               style={{
                 padding:"9px 18px", fontSize:11, fontWeight:700, letterSpacing:"0.14em",
-                background:"transparent", color:C.green,
+                background:"transparent", color:"#00FF88",
                 border:"1px solid rgba(0,255,136,0.3)", borderRadius:6, cursor:"pointer",
                 fontFamily:"'DM Mono',monospace",
                 boxShadow:"0 0 12px rgba(0,255,136,0.15)",
