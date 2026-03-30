@@ -36,7 +36,17 @@ const DEFAULT_TOOLS = [
     note: "Paste the full thread or just the last message → get your next step, 3 copy-ready responses in Frank's voice, and warnings before you make a mistake",
   },
   {
-    id: "setter-live",
+    id: "dm-assist",
+    name: "Live DM Assist",
+    tagline: "Real-time next-move guidance for active DM conversations",
+    category: "Setter Ops",
+    emoji: "🚀",
+    status: "live",
+    version: "v7.0",
+    url: "__internal__dm-assist",
+    note: "Paste the full thread or just the last message — get your next step, 3 copy-ready responses in Frank's voice, and warnings before you make a mistake.",
+    internal: true,
+  },
     name: "Setter Live Dashboard",
     tagline: "Live EOD tracker + conversation pipeline for Liz & Chantal",
     category: "Setter Ops",
@@ -105,6 +115,8 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
       onNavigate("setter-live");
     } else if (tool.internal && tool.url === "__internal__closer-live") {
       onNavigate("closer-live");
+    } else if (tool.internal && tool.url === "__internal__dm-assist") {
+      onNavigate("dm-assist");
     } else {
       window.open(tool.url, "_blank");
     }
