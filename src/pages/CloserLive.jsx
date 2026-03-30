@@ -3,10 +3,14 @@ import { BarChart, LineChart, MultiLineChart, ChartCard, fillRange, fmtCount, fm
 
 const TODAY   = new Date().toLocaleDateString("en-US",{month:"2-digit",day:"2-digit",year:"numeric"});
 const TODAY_D = new Date().toLocaleDateString("en-US",{weekday:"long",year:"numeric",month:"long",day:"numeric"});
-const CLOSER_KEY = "jp";
+const CLOSER_KEY   = "jp";
 export const PIPE_KEY = `closer:${CLOSER_KEY}:pipeline`;
-const HIST_KEY   = `closer:${CLOSER_KEY}:eod:history`;
-const EOD_KEY_FN = () => `closer:${CLOSER_KEY}:eod:${TODAY}`;
+const HIST_KEY     = `closer:${CLOSER_KEY}:eod:history`;
+const EOD_KEY_FN   = () => `closer:${CLOSER_KEY}:eod:${TODAY}`;
+const SETTER_KEYS  = [
+  { key:"setter:liz:pipeline",     rep:"Liz"     },
+  { key:"setter:chantal:pipeline", rep:"Chantal" },
+];
 
 const C = {
   gold:"#FFD700",goldGlow:"rgba(255,215,0,0.8)",goldDim:"rgba(255,215,0,0.12)",goldBorder:"rgba(255,215,0,0.35)",
@@ -36,6 +40,17 @@ export const STAGES = [
 ];
 const SM = {};
 STAGES.forEach(s => SM[s.key] = s);
+
+// Setter pipeline stages (for unified view)
+const SETTER_STAGES = [
+  {key:"new",    label:"New DM",      color:"#909090", glow:"rgba(144,144,144,0.6)", dim:"rgba(144,144,144,0.08)", border:"rgba(144,144,144,0.25)", trap:false},
+  {key:"opener", label:"Opener Sent", color:"#44AAFF", glow:"rgba(68,170,255,0.6)",  dim:"rgba(68,170,255,0.08)",  border:"rgba(68,170,255,0.25)",  trap:false},
+  {key:"pain",   label:"Pain",        color:"#FF9944", glow:"rgba(255,153,68,0.6)",  dim:"rgba(255,153,68,0.08)",  border:"rgba(255,153,68,0.25)",  trap:false},
+  {key:"link",   label:"Link Sent",   color:"#CC99FF", glow:"rgba(204,153,255,0.6)", dim:"rgba(204,153,255,0.08)", border:"rgba(204,153,255,0.25)", trap:false},
+  {key:"booked", label:"Booked",      color:"#FFD700", glow:"rgba(255,215,0,0.6)",   dim:"rgba(255,215,0,0.08)",   border:"rgba(255,215,0,0.25)",  trap:false},
+  {key:"disq",   label:"Disq'd",      color:"#FF4444", glow:"rgba(255,68,68,0.6)",   dim:"rgba(255,68,68,0.08)",   border:"rgba(255,68,68,0.25)",  trap:false},
+];
+SETTER_STAGES.forEach(s => { if (!SM[s.key]) SM[s.key] = s; });
 
 const SS_STAGES      = ["ssTaken","offer","verbal","deposit","closed","reoffer","handedoff"];
 const OFFER_STAGES   = ["offer","verbal","deposit","closed","reoffer","handedoff"];
@@ -351,15 +366,17 @@ function CloserEOD({pipeline,history,onHistoryUpdate}) {
   );
 }
 
-function CloserPipeline({pipeline,setGlobalPipeline}) {
+function CloserPipeline({pipeline,setGlobalPipeline,setterLeads=[]}) {
   const [showAdd,setShowAdd]=useState(false);
   const [form,setForm]=useState(makeEmpty());
   const [editId,setEditId]=useState(null);
-  const [filter,setFilter]=useState(null);
+  const [stageFilter,setStageFilter]=useState(null);
+  const [repFilter,setRepFilter]=useState("all"); // all | liz | chantal | jp
   const [errH,setErrH]=useState(false);
   const [errCash,setErrCash]=useState(false);
   const leadsRef=useRef([]);
   useEffect(()=>{leadsRef.current=pipeline;},[pipeline]);
+
   function makeEmpty(){return{date:TODAY,name:"",handle:"",closer:"JP Campbell",program:"",cash:"",paymentMethod:"",callTime:"",objection:"",oneCallClose:false,setterName:"",notes:"",stage:"booked"};}
   const persist=next=>{apiSet(PIPE_KEY,next); setGlobalPipeline(next);};
   const save=()=>{
@@ -373,53 +390,127 @@ function CloserPipeline({pipeline,setGlobalPipeline}) {
   const del=id=>{if(!window.confirm("Remove?"))return; const n=leadsRef.current.filter(l=>l.id!==id); leadsRef.current=n; persist(n);};
   const startEdit=l=>{setForm({...makeEmpty(),...l}); setEditId(l.id); setErrH(false); setErrCash(false); setShowAdd(true);};
   const openAdd=()=>{setForm(makeEmpty()); setEditId(null); setErrH(false); setErrCash(false); setShowAdd(true);};
-  const visible=pipeline.filter(l=>!filter||l.stage===filter).sort((a,b)=>b.id-a.id);
-  const pill=key=>{const s=SM[key]||SM["booked"]; return <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",padding:"3px 9px",borderRadius:3,background:s.dim,color:s.color,border:`1px solid ${s.border}`,whiteSpace:"nowrap",textShadow:`0 0 6px ${s.glow}55`,display:"inline-flex",alignItems:"center",gap:5}}>{s.trap&&<span style={{width:5,height:5,borderRadius:"50%",background:s.color,display:"inline-block"}}/>}{s.label}</span>;};
+
+  // Merge all leads with source tags
+  const closerTagged  = pipeline.map(l=>({...l, _rep:"JP", _source:"closer"}));
+  const allLeads      = [...closerTagged, ...setterLeads].sort((a,b)=>b.id-a.id);
+
+  // Apply filters
+  const visible = allLeads.filter(l => {
+    const repOk = repFilter==="all" || l._rep?.toLowerCase()===repFilter;
+    const stageOk = !stageFilter || l.stage===stageFilter;
+    return repOk && stageOk;
+  });
+
+  // Stats row
+  const total    = allLeads.length;
+  const todayAll = allLeads.filter(l=>l.date===TODAY).length;
+
+  const pill=key=>{const s=SM[key]||{label:key,color:C.t4,dim:"transparent",border:C.border,glow:"transparent",trap:false}; return <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",padding:"3px 9px",borderRadius:3,background:s.dim,color:s.color,border:`1px solid ${s.border}`,whiteSpace:"nowrap",display:"inline-flex",alignItems:"center",gap:5}}>{s.trap&&<span style={{width:5,height:5,borderRadius:"50%",background:s.color,display:"inline-block"}}/>}{s.label}</span>;};
+
+  const repPill=(rep,source)=>{
+    const colors={Liz:C.green,Chantal:"#44AAFF",JP:C.gold};
+    const col=colors[rep]||C.t3;
+    return <span style={{fontFamily:"'DM Mono',monospace",fontSize:9,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",padding:"2px 7px",borderRadius:3,background:`${col}15`,color:col,border:`1px solid ${col}30`,whiteSpace:"nowrap"}}>{rep}</span>;
+  };
+
   const FI={background:C.s2,border:`1.5px solid ${C.border}`,borderRadius:5,padding:"10px 13px",fontSize:14,color:C.t1,fontFamily:"'Barlow',sans-serif",width:"100%",outline:"none",boxSizing:"border-box",transition:"border-color 0.15s"};
   const SEL={...FI,cursor:"pointer",appearance:"none",WebkitAppearance:"none"};
+
   return (
-    <div style={{padding:"0 24px 28px",maxWidth:1080,margin:"0 auto"}}>
-      <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap",marginBottom:16}}>
-        <button onClick={openAdd} style={{padding:"10px 22px",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#CC8800)`,color:"#000",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 16px ${C.goldGlow}`}}>+ ADD LEAD</button>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap",marginLeft:"auto"}}>
-          {[null,...STAGES.map(s=>s.key)].map(k=>{
-            const s=k?SM[k]:null,active=filter===k;
-            return <button key={k||"all"} onClick={()=>setFilter(k)} style={{padding:"5px 10px",fontFamily:"'DM Mono',monospace",fontSize:9,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",borderRadius:4,cursor:"pointer",background:active?(k?s.dim:C.goldDim):"transparent",color:active?(k?s.color:C.gold):C.t3,border:`1px solid ${active?(k?s.border:C.goldBorder):C.border}`,transition:"all 0.1s"}}>{k?s.label:"ALL"}</button>;
-          })}
+    <div style={{padding:"0 24px 28px",maxWidth:1100,margin:"0 auto"}}>
+
+      {/* Stats bar */}
+      <div style={{display:"flex",alignItems:"center",gap:20,marginBottom:14,padding:"10px 16px",background:C.s1,borderRadius:6,border:`1px solid ${C.border}`}}>
+        {[["Total Leads",total,C.t2],["Today",todayAll,C.gold],["Liz",setterLeads.filter(l=>l._rep==="Liz").length,C.green],["Chantal",setterLeads.filter(l=>l._rep==="Chantal").length,"#44AAFF"],["JP Pipeline",pipeline.length,C.gold]].map(([lbl,val,col])=>(
+          <div key={lbl} style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+            <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:24,fontWeight:900,color:col,lineHeight:1,textShadow:`0 0 10px ${col}66`}}>{val}</span>
+            <span style={{fontFamily:"'DM Mono',monospace",fontSize:8,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.t4}}>{lbl}</span>
+          </div>
+        ))}
+        <div style={{flex:1}}/>
+        <button onClick={openAdd} style={{padding:"9px 20px",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#CC8800)`,color:"#000",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 16px ${C.goldGlow}`,flexShrink:0}}>+ ADD LEAD</button>
+      </div>
+
+      {/* Filters */}
+      <div style={{display:"flex",alignItems:"center",gap:8,flexWrap:"wrap",marginBottom:12}}>
+        {/* Rep filter */}
+        <div style={{display:"flex",gap:5,marginRight:8}}>
+          {[["all","ALL",C.gold],["liz","LIZ",C.green],["chantal","CHANTAL","#44AAFF"],["jp","JP",C.gold]].map(([val,lbl,col])=>(
+            <button key={val} onClick={()=>setRepFilter(val)}
+              style={{padding:"5px 11px",fontFamily:"'DM Mono',monospace",fontSize:9,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",borderRadius:4,cursor:"pointer",background:repFilter===val?`${col}18`:"transparent",color:repFilter===val?col:C.t4,border:`1px solid ${repFilter===val?col+"55":C.border}`,transition:"all 0.1s"}}>
+              {lbl}
+            </button>
+          ))}
+        </div>
+        <div style={{width:1,height:20,background:C.border}}/>
+        {/* Stage filter */}
+        <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+          <button onClick={()=>setStageFilter(null)} style={{padding:"4px 9px",fontFamily:"'DM Mono',monospace",fontSize:9,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",borderRadius:3,cursor:"pointer",background:!stageFilter?C.goldDim:"transparent",color:!stageFilter?C.gold:C.t4,border:`1px solid ${!stageFilter?C.goldBorder:C.border}`,transition:"all 0.1s"}}>ALL STAGES</button>
+          {[...STAGES,...SETTER_STAGES.filter(s=>!SM[s.key]||s.key==="new"||s.key==="opener"||s.key==="pain"||s.key==="link"||s.key==="disq")].map(s=>(
+            <button key={s.key} onClick={()=>setStageFilter(s.key===stageFilter?null:s.key)}
+              style={{padding:"4px 9px",fontFamily:"'DM Mono',monospace",fontSize:9,fontWeight:700,letterSpacing:"0.1em",textTransform:"uppercase",borderRadius:3,cursor:"pointer",background:stageFilter===s.key?s.dim:"transparent",color:stageFilter===s.key?s.color:C.t4,border:`1px solid ${stageFilter===s.key?s.border:C.border}`,transition:"all 0.1s"}}>
+              {s.label}
+            </button>
+          ))}
         </div>
       </div>
+
+      {/* Unified table */}
       <div style={{overflowX:"auto",background:C.s1,border:`1.5px solid ${C.border}`,borderRadius:8}}>
-        <table style={{width:"100%",borderCollapse:"collapse",minWidth:900}}>
+        <table style={{width:"100%",borderCollapse:"collapse",minWidth:960}}>
           <thead><tr style={{borderBottom:`1px solid ${C.border}`}}>
-            {["Date","Prospect","Program","Stage","Cash","1-Call","Setter","Objection",""].map(h=><th key={h} style={{padding:"12px 13px",fontFamily:"'DM Mono',monospace",fontSize:10,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.t3,textAlign:"left",whiteSpace:"nowrap"}}>{h}</th>)}
+            {["Date","Rep","Prospect","Stage","Cash","1-Call","KW / Program","Objection / Notes",""].map(h=><th key={h} style={{padding:"11px 12px",fontFamily:"'DM Mono',monospace",fontSize:10,fontWeight:700,letterSpacing:"0.14em",textTransform:"uppercase",color:C.t3,textAlign:"left",whiteSpace:"nowrap"}}>{h}</th>)}
           </tr></thead>
           <tbody>
-            {visible.map(l=>(
-              <tr key={l.id} style={{borderBottom:`1px solid ${C.s3}`,background:l.stage==="verbal"?"rgba(255,184,0,0.02)":"transparent",transition:"background 0.1s"}}
-                onMouseEnter={e=>e.currentTarget.style.background=C.s2} onMouseLeave={e=>e.currentTarget.style.background=l.stage==="verbal"?"rgba(255,184,0,0.02)":"transparent"}>
-                <td style={{padding:"10px 13px",fontFamily:"'DM Mono',monospace",fontSize:11,color:C.t3,whiteSpace:"nowrap"}}>{l.date}</td>
-                <td style={{padding:"10px 13px"}}><div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:14,letterSpacing:"0.08em",color:C.t1,whiteSpace:"nowrap"}}>{l.name||l.handle}</div><div style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:C.t4}}>{l.handle}</div></td>
-                <td style={{padding:"10px 13px",fontFamily:"'DM Mono',monospace",fontSize:11,color:C.t3,whiteSpace:"nowrap"}}>{l.program||"—"}</td>
-                <td style={{padding:"10px 13px"}}>{pill(l.stage)}</td>
-                <td style={{padding:"10px 13px",fontFamily:"'Bebas Neue',sans-serif",fontSize:14,color:l.cash?C.green:C.t4,textShadow:l.cash?`0 0 8px ${C.green}88`:"none",whiteSpace:"nowrap"}}>{l.cash?"$"+parseFloat(l.cash).toLocaleString():"—"}</td>
-                <td style={{padding:"10px 13px",textAlign:"center"}}><span style={{fontFamily:"'DM Mono',monospace",fontSize:10,fontWeight:700,padding:"3px 8px",borderRadius:3,background:l.oneCallClose?C.greenDim:"transparent",color:l.oneCallClose?C.green:C.t4,border:`1px solid ${l.oneCallClose?C.greenBorder:C.border}`}}>{l.oneCallClose?"YES":"NO"}</span></td>
-                <td style={{padding:"10px 13px",fontFamily:"'DM Mono',monospace",fontSize:11,color:C.t3,whiteSpace:"nowrap"}}>{l.setterName||"—"}</td>
-                <td style={{padding:"10px 13px",fontSize:12,color:C.t3,maxWidth:160,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{l.objection||"—"}</td>
-                <td style={{padding:"10px 13px",whiteSpace:"nowrap",display:"flex",gap:5,alignItems:"center"}}>
-                  <button onClick={()=>startEdit(l)} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:4,padding:"4px 10px",color:C.t3,cursor:"pointer",fontSize:11,fontFamily:"'DM Mono',monospace",letterSpacing:"0.08em",transition:"all 0.1s"}} onMouseEnter={e=>{e.target.style.borderColor=C.gold;e.target.style.color=C.gold;}} onMouseLeave={e=>{e.target.style.borderColor=C.border;e.target.style.color=C.t3;}}>EDIT</button>
-                  <button onClick={()=>del(l.id)} style={{background:"none",border:`1px solid ${C.redBorder}`,borderRadius:4,padding:"4px 10px",color:C.red,cursor:"pointer",fontSize:11,fontFamily:"'DM Mono',monospace",transition:"all 0.1s"}} onMouseEnter={e=>{e.target.style.background=C.redDim;}} onMouseLeave={e=>{e.target.style.background="none";}}>✕</button>
-                </td>
-              </tr>
-            ))}
-            {visible.length===0&&<tr><td colSpan={9} style={{padding:"48px 14px",textAlign:"center",fontFamily:"'DM Mono',monospace",fontSize:12,color:C.t4,letterSpacing:"0.14em"}}>NO LEADS — BOOKED CALLS AUTO-FEED FROM SETTER PIPELINE</td></tr>}
+            {visible.map((l,i)=>{
+              const isCloser=l._source==="closer";
+              const rowBg=l.stage==="verbal"?"rgba(255,184,0,0.02)":"transparent";
+              return (
+                <tr key={`${l._source}-${l.id}-${i}`}
+                  style={{borderBottom:`1px solid ${C.s3}`,background:rowBg,transition:"background 0.1s",borderLeft:isCloser?`2px solid rgba(255,215,0,0.15)`:`2px solid rgba(68,170,255,0.1)`}}
+                  onMouseEnter={e=>e.currentTarget.style.background=C.s2}
+                  onMouseLeave={e=>e.currentTarget.style.background=rowBg}>
+                  <td style={{padding:"9px 12px",fontFamily:"'DM Mono',monospace",fontSize:11,color:C.t3,whiteSpace:"nowrap"}}>{l.date}</td>
+                  <td style={{padding:"9px 12px"}}>{repPill(l._rep,l._source)}</td>
+                  <td style={{padding:"9px 12px"}}>
+                    <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:14,letterSpacing:"0.08em",color:C.t1,whiteSpace:"nowrap"}}>{l.name||l.handle}</div>
+                    <div style={{fontFamily:"'DM Mono',monospace",fontSize:10,color:C.t4}}>{l.handle}</div>
+                  </td>
+                  <td style={{padding:"9px 12px"}}>{pill(l.stage)}</td>
+                  <td style={{padding:"9px 12px",fontFamily:"'Bebas Neue',sans-serif",fontSize:14,color:l.cash?C.green:C.t4,textShadow:l.cash?`0 0 8px rgba(0,255,136,0.5)`:"none",whiteSpace:"nowrap"}}>{l.cash?"$"+parseFloat(l.cash).toLocaleString():"—"}</td>
+                  <td style={{padding:"9px 12px",textAlign:"center"}}>
+                    {isCloser
+                      ? <span style={{fontFamily:"'DM Mono',monospace",fontSize:10,fontWeight:700,padding:"3px 7px",borderRadius:3,background:l.oneCallClose?C.greenDim:"transparent",color:l.oneCallClose?C.green:C.t4,border:`1px solid ${l.oneCallClose?C.greenBorder:C.border}`}}>{l.oneCallClose?"YES":"—"}</span>
+                      : <span style={{color:C.t4,fontSize:11}}>—</span>
+                    }
+                  </td>
+                  <td style={{padding:"9px 12px",fontFamily:"'DM Mono',monospace",fontSize:11,color:C.t3,maxWidth:140,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{l.kw||l.program||"—"}</td>
+                  <td style={{padding:"9px 12px",fontSize:12,color:C.t3,maxWidth:180,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{l.objection||l.notes||"—"}</td>
+                  <td style={{padding:"9px 12px",whiteSpace:"nowrap"}}>
+                    {isCloser ? (
+                      <div style={{display:"flex",gap:4}}>
+                        <button onClick={()=>startEdit(l)} style={{background:"none",border:`1px solid ${C.border}`,borderRadius:4,padding:"4px 9px",color:C.t3,cursor:"pointer",fontSize:11,fontFamily:"'DM Mono',monospace",transition:"all 0.1s"}} onMouseEnter={e=>{e.target.style.borderColor=C.gold;e.target.style.color=C.gold;}} onMouseLeave={e=>{e.target.style.borderColor=C.border;e.target.style.color=C.t3;}}>EDIT</button>
+                        <button onClick={()=>del(l.id)} style={{background:"none",border:`1px solid ${C.redBorder}`,borderRadius:4,padding:"4px 9px",color:C.red,cursor:"pointer",fontSize:11,fontFamily:"'DM Mono',monospace",transition:"all 0.1s"}} onMouseEnter={e=>{e.target.style.background=C.redDim;}} onMouseLeave={e=>{e.target.style.background="none";}}>✕</button>
+                      </div>
+                    ) : (
+                      <span style={{fontFamily:"'DM Mono',monospace",fontSize:9,color:C.t4,letterSpacing:"0.1em"}}>READ-ONLY</span>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+            {visible.length===0&&<tr><td colSpan={9} style={{padding:"48px 14px",textAlign:"center",fontFamily:"'DM Mono',monospace",fontSize:12,color:C.t4,letterSpacing:"0.14em"}}>NO LEADS MATCH CURRENT FILTERS</td></tr>}
           </tbody>
         </table>
       </div>
+
+      {/* ADD / EDIT modal — closer leads only */}
       {showAdd&&(
         <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.97)",zIndex:500,display:"flex",alignItems:"flex-start",justifyContent:"center",padding:"24px 20px",backdropFilter:"blur(8px)",overflowY:"auto"}}>
           <div style={{background:C.s1,border:`2px solid ${C.border}`,borderRadius:10,maxWidth:560,width:"100%",animation:"fadeIn 0.2s ease"}}>
             <div style={{padding:"20px 24px",borderBottom:`1px solid ${C.border}`,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:"0.12em",color:C.gold,textShadow:`0 0 14px ${C.goldGlow}`}}>{editId!==null?"EDIT":"NEW LEAD"}</span>
+              <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:22,letterSpacing:"0.12em",color:C.gold,textShadow:`0 0 14px ${C.goldGlow}`}}>{editId!==null?"EDIT LEAD":"NEW CLOSER LEAD"}</span>
               <button onClick={()=>{setShowAdd(false);setEditId(null);}} style={{background:"none",border:"none",color:C.t3,fontSize:20,cursor:"pointer"}}>✕</button>
             </div>
             <div style={{padding:24,display:"flex",flexDirection:"column",gap:14}}>
@@ -479,15 +570,33 @@ export default function CloserLive({onNavigate}) {
   const [tab,setPipeline2]=useState("eod");
   const setTab=setPipeline2;
   const [pipeline,setPipeline]=useState([]);
+  const [setterLeads,setSetterLeads]=useState([]);
   const [history,setHistory]=useState([]);
   const [loaded,setLoaded]=useState(false);
 
-  useEffect(()=>{
-    Promise.all([apiGet(PIPE_KEY),apiGet(HIST_KEY)]).then(([p,h])=>{if(p)setPipeline(p); if(h)setHistory(h); setLoaded(true);});
-    const fn=()=>{if(!document.hidden) Promise.all([apiGet(PIPE_KEY),apiGet(HIST_KEY)]).then(([p,h])=>{if(p)setPipeline(p); if(h)setHistory(h);});};
-    document.addEventListener("visibilitychange",fn);
-    return()=>document.removeEventListener("visibilitychange",fn);
-  },[]);
+  const loadAll = useCallback(() => {
+    Promise.all([
+      apiGet(PIPE_KEY),
+      apiGet(HIST_KEY),
+      ...SETTER_KEYS.map(s => apiGet(s.key).then(d => ({ data:d, rep:s.rep }))),
+    ]).then(([p, h, ...setterResults]) => {
+      if (p) setPipeline(p);
+      if (h) setHistory(h);
+      // Merge setter leads with rep label
+      const merged = setterResults.flatMap(r =>
+        (r.data || []).map(l => ({ ...l, _rep: r.rep, _source:"setter" }))
+      );
+      setSetterLeads(merged);
+      setLoaded(true);
+    });
+  }, []);
+
+  useEffect(() => {
+    loadAll();
+    const fn = () => { if (!document.hidden) loadAll(); };
+    document.addEventListener("visibilitychange", fn);
+    return () => document.removeEventListener("visibilitychange", fn);
+  }, [loadAll]);
 
   const refreshHistory=useCallback(()=>{apiGet(HIST_KEY).then(h=>{if(h)setHistory(h);});},[]);
 
@@ -507,14 +616,13 @@ export default function CloserLive({onNavigate}) {
           </div>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
             {TABS.map(t=><button key={t.key} onClick={()=>setTab(t.key)} style={{padding:"7px 14px",fontFamily:"'DM Mono',monospace",fontSize:11,fontWeight:700,letterSpacing:"0.12em",textTransform:"uppercase",borderRadius:4,cursor:"pointer",border:tab===t.key?`1px solid ${C.goldBorder}`:`1px solid ${C.border}`,background:tab===t.key?C.goldDim:"transparent",color:tab===t.key?C.gold:C.t3,boxShadow:tab===t.key?`0 0 10px rgba(255,215,0,0.2)`:"none",transition:"all 0.15s"}}>{t.label}</button>)}
-            <button onClick={()=>onNavigate("setter-live")} style={{padding:"7px 14px",fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:"0.12em",textTransform:"uppercase",color:C.t3,background:"transparent",border:`1px solid ${C.border}`,borderRadius:4,cursor:"pointer",transition:"all 0.15s"}} onMouseEnter={e=>{e.target.style.color="#00FF88";e.target.style.borderColor="rgba(0,255,136,0.35)";}} onMouseLeave={e=>{e.target.style.color=C.t3;e.target.style.borderColor=C.border;}}>Setters →</button>
             <button onClick={()=>onNavigate("hub")} style={{padding:"7px 14px",fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:"0.12em",textTransform:"uppercase",color:C.t3,background:"transparent",border:`1px solid ${C.border}`,borderRadius:4,cursor:"pointer",transition:"all 0.15s"}} onMouseEnter={e=>{e.target.style.color=C.gold;e.target.style.borderColor=C.goldBorder;}} onMouseLeave={e=>{e.target.style.color=C.t3;e.target.style.borderColor=C.border;}}>Hub →</button>
           </div>
         </div>
         {!loaded
           ? <div style={{padding:80,textAlign:"center",fontFamily:"'DM Mono',monospace",fontSize:12,color:C.t4,letterSpacing:"0.16em"}}>LOADING...</div>
           : tab==="eod"      ? <CloserEOD pipeline={pipeline} history={history} onHistoryUpdate={refreshHistory}/>
-          : tab==="pipeline" ? <CloserPipeline pipeline={pipeline} setGlobalPipeline={setPipeline}/>
+          : tab==="pipeline" ? <CloserPipeline pipeline={pipeline} setGlobalPipeline={setPipeline} setterLeads={setterLeads}/>
           : <CloserGraphs pipeline={pipeline} history={history}/>
         }
       </div>
