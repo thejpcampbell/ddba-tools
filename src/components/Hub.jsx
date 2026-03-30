@@ -14,17 +14,6 @@ const STATUS = {
 
 const DEFAULT_TOOLS = [
   {
-    id: "dm-audit",
-    name: "DM Audit Engine",
-    tagline: "Score setter conversations against the DDBA Playbook v6.0",
-    category: "Setter Ops",
-    emoji: "🎯",
-    status: "live",
-    version: "v6.0",
-    url: "https://claude.ai/public/artifacts/4dc6f2fa-8822-460f-bdb7-a4e8fed0ebbd",
-    note: "Paste a raw Instagram transcript → full WIN / FLAG / NOTE callout report scored against the canonical 7-step script",
-  },
-  {
     id: "dm-assist",
     name: "Live DM Assist",
     tagline: "Real-time next-move guidance for active DM conversations",
