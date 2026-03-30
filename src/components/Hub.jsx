@@ -7,8 +7,8 @@ const CATEGORIES = [
 
 const STATUS = {
   live:     { label: "LIVE",     color: "#00FF41", bg: "rgba(0,255,65,0.08)",   glow: "rgba(0,255,65,0.6)" },
-  beta:     { label: "BETA",     color: "#FFD700", bg: "rgba(255,215,0,0.08)",  glow: "rgba(255,215,0,0.3)" },
-  building: { label: "BUILDING", color: "#FF8C00", bg: "rgba(255,140,0,0.08)",  glow: "rgba(255,140,0,0.3)" },
+  beta:     { label: "BETA",     color: "#00AAFF", bg: "rgba(0,170,255,0.08)",  glow: "rgba(0,170,255,0.3)" },
+  building: { label: "BUILDING", color: "#0088DD", bg: "rgba(255,140,0,0.08)",  glow: "rgba(255,140,0,0.3)" },
   planned:  { label: "PLANNED",  color: "#444",    bg: "rgba(60,60,60,0.15)",   glow: "transparent" },
 };
 
@@ -87,9 +87,9 @@ function saveTools(tools) {
 
 const INPUT_STYLE = {
   width:"100%", background:"#030303", border:"1px solid #1a1a1a",
-  borderRadius:6, padding:"10px 14px", fontSize:13, color:"#CCC",
+  borderRadius:6, padding:"10px 14px", fontSize:13, color:"#EEEEF2",
   fontFamily:"'DM Mono',monospace", outline:"none", boxSizing:"border-box",
-  caretColor:"#FFD700", transition:"border-color 0.2s",
+  caretColor:"#00AAFF", transition:"border-color 0.2s",
 };
 
 // ── TOOL CARD ────────────────────────────────────────────────────────────
@@ -118,11 +118,11 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
         borderRadius: 14,
         padding: "1px",
         background: hov
-          ? "linear-gradient(135deg, #FFD700 0%, #FF8C00 30%, #FFD700 60%, #CC6600 80%, #FFD700 100%)"
+          ? "linear-gradient(135deg, #00AAFF 0%, #0088DD 30%, #00AAFF 60%, #0066AA 80%, #00AAFF 100%)"
           : "linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 50%, #141414 100%)",
         transition: "all 0.3s ease",
         boxShadow: hov
-          ? `0 0 0 1px rgba(255,215,0,0.4), 0 0 30px rgba(255,215,0,0.25), 0 0 80px rgba(255,215,0,0.1), 0 20px 60px rgba(0,0,0,0.9)`
+          ? `0 0 0 1px rgba(0,170,255,0.4), 0 0 30px rgba(0,170,255,0.25), 0 0 80px rgba(0,170,255,0.1), 0 20px 60px rgba(0,0,0,0.9)`
           : "0 4px 24px rgba(0,0,0,0.8)",
       }}
     >
@@ -139,8 +139,8 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
         {hov && (
           <div style={{
             position:"absolute", top:0, left:0, right:0, height:1,
-            background:"linear-gradient(90deg, transparent 0%, #FFD700 20%, #FF8C00 50%, #FFD700 80%, transparent 100%)",
-            boxShadow:"0 0 20px rgba(255,215,0,0.9), 0 0 40px rgba(255,215,0,0.5), 0 0 80px rgba(255,215,0,0.2)",
+            background:"linear-gradient(90deg, transparent 0%, #00AAFF 20%, #0088DD 50%, #00AAFF 80%, transparent 100%)",
+            boxShadow:"0 0 20px rgba(0,170,255,0.9), 0 0 40px rgba(0,170,255,0.5), 0 0 80px rgba(0,170,255,0.2)",
           }} />
         )}
 
@@ -149,8 +149,8 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
           position:"absolute", top:-60, left:"50%", transform:"translateX(-50%)",
           width:200, height:120,
           background: hov
-            ? "radial-gradient(ellipse, rgba(255,215,0,0.08) 0%, transparent 70%)"
-            : "radial-gradient(ellipse, rgba(255,215,0,0.02) 0%, transparent 70%)",
+            ? "radial-gradient(ellipse, rgba(0,170,255,0.08) 0%, transparent 70%)"
+            : "radial-gradient(ellipse, rgba(0,170,255,0.02) 0%, transparent 70%)",
           pointerEvents:"none", transition:"all 0.4s",
         }} />
 
@@ -163,9 +163,9 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
               background: hov
                 ? "linear-gradient(135deg, #1f1800, #2e2100, #1a1500)"
                 : "linear-gradient(135deg, #121000, #1a1600, #0e0c00)",
-              border:`1px solid ${hov ? "rgba(255,215,0,0.5)" : "rgba(255,215,0,0.12)"}`,
+              border:`1px solid ${hov ? "rgba(0,170,255,0.5)" : "rgba(0,170,255,0.12)"}`,
               display:"flex", alignItems:"center", justifyContent:"center", fontSize:22,
-              boxShadow: hov ? "0 0 20px rgba(255,215,0,0.35), inset 0 0 10px rgba(255,215,0,0.05)" : "none",
+              boxShadow: hov ? "0 0 20px rgba(0,170,255,0.35), inset 0 0 10px rgba(0,170,255,0.05)" : "none",
               transition:"all 0.3s",
             }}>
               {tool.emoji}
@@ -177,7 +177,7 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
                 fontFamily:"'Bebas Neue','Anton','Impact',sans-serif",
                 letterSpacing:"0.1em",
                 ...(hov
-                  ? { background:"linear-gradient(135deg, #FFE566, #FFD700, #FF8C00, #FFD700)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text", filter:"drop-shadow(0 0 8px rgba(255,215,0,0.5))" }
+                  ? { background:"linear-gradient(135deg, #33CCFF, #00AAFF, #0088DD, #00AAFF)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text", filter:"drop-shadow(0 0 8px rgba(0,170,255,0.5))" }
                   : { color:"#E8E4DC" }),
                 transition:"all 0.3s",
               }}>
@@ -208,8 +208,8 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
         <div style={{
           height:1, marginBottom:16,
           background: hov
-            ? "linear-gradient(90deg, rgba(255,215,0,0.5), rgba(255,140,0,0.3), transparent)"
-            : "linear-gradient(90deg, rgba(255,215,0,0.1), transparent)",
+            ? "linear-gradient(90deg, rgba(0,170,255,0.5), rgba(255,140,0,0.3), transparent)"
+            : "linear-gradient(90deg, rgba(0,170,255,0.1), transparent)",
           transition:"all 0.3s",
         }} />
 
@@ -231,15 +231,15 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
               flex:1, padding:"12px 0", fontSize:12, fontWeight:700, letterSpacing:"0.16em",
               background: canOpen
                 ? hov
-                  ? "linear-gradient(135deg, #FFE566 0%, #FFD700 25%, #FF8C00 60%, #FFD700 100%)"
-                  : "linear-gradient(135deg, #FFD700 0%, #CC8800 50%, #FFD700 100%)"
+                  ? "linear-gradient(135deg, #33CCFF 0%, #00AAFF 25%, #0088DD 60%, #00AAFF 100%)"
+                  : "linear-gradient(135deg, #00AAFF 0%, #0077BB 50%, #00AAFF 100%)"
                 : "#080808",
               color: canOpen ? "#000" : "#1e1e1e",
               border: canOpen ? "none" : "1px solid #111",
               borderRadius:7, cursor: canOpen ? "pointer" : "default",
               fontFamily:"'Bebas Neue','Anton',sans-serif",
               boxShadow: canOpen
-                ? hov ? "0 0 40px rgba(255,215,0,0.8), 0 4px 20px rgba(255,215,0,0.4)" : "0 0 20px rgba(255,215,0,0.4)"
+                ? hov ? "0 0 40px rgba(0,170,255,0.8), 0 4px 20px rgba(0,170,255,0.4)" : "0 0 20px rgba(0,170,255,0.4)"
                 : "none",
               transition:"all 0.2s",
             }}
@@ -248,7 +248,7 @@ function ToolCard({ tool, onEdit, onDelete, onNavigate }) {
           </button>
           <button onClick={() => onEdit(tool)}
             style={{ padding:"12px 14px", fontSize:14, background:"transparent", border:"1px solid #141414", borderRadius:7, cursor:"pointer", color:"#333", transition:"all 0.15s" }}
-            onMouseEnter={e => { e.target.style.borderColor="#FFD700"; e.target.style.color="#FFD700"; e.target.style.boxShadow="0 0 10px rgba(255,215,0,0.3)"; }}
+            onMouseEnter={e => { e.target.style.borderColor="#00AAFF"; e.target.style.color="#00AAFF"; e.target.style.boxShadow="0 0 10px rgba(0,170,255,0.3)"; }}
             onMouseLeave={e => { e.target.style.borderColor="#141414"; e.target.style.color="#333"; e.target.style.boxShadow="none"; }}>✎</button>
           <button onClick={() => onDelete(tool.id)}
             style={{ padding:"12px 14px", fontSize:14, background:"transparent", border:"1px solid #141414", borderRadius:7, cursor:"pointer", color:"#333", transition:"all 0.15s" }}
@@ -272,18 +272,18 @@ function Modal({ form, setForm, onSave, onClose, isEdit }) {
   ];
   return (
     <div style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.95)", display:"flex", alignItems:"center", justifyContent:"center", zIndex:300, padding:24, backdropFilter:"blur(8px)" }}>
-      <div style={{ borderRadius:16, padding:"1.5px", background:"linear-gradient(135deg, #FFD700, #CC6600, #FFD700, #884400)", width:"100%", maxWidth:500, boxShadow:"0 0 80px rgba(255,215,0,0.2), 0 0 160px rgba(255,215,0,0.08)" }}>
+      <div style={{ borderRadius:16, padding:"1.5px", background:"linear-gradient(135deg, #00AAFF, #0066AA, #00AAFF, #005599)", width:"100%", maxWidth:500, boxShadow:"0 0 80px rgba(0,170,255,0.2), 0 0 160px rgba(0,170,255,0.08)" }}>
         <div style={{ background:"linear-gradient(160deg, #0c0900, #070600)", borderRadius:14, padding:"32px" }}>
-          <div style={{ fontSize:28, fontFamily:"'Bebas Neue','Anton',sans-serif", letterSpacing:"0.12em", marginBottom:4, background:"linear-gradient(135deg, #FFE566, #FFD700, #FF8C00)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text", filter:"drop-shadow(0 0 12px rgba(255,215,0,0.4))" }}>
+          <div style={{ fontSize:28, fontFamily:"'Bebas Neue','Anton',sans-serif", letterSpacing:"0.12em", marginBottom:4, background:"linear-gradient(135deg, #33CCFF, #00AAFF, #0088DD)", WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text", filter:"drop-shadow(0 0 12px rgba(0,170,255,0.4))" }}>
             {isEdit ? "EDIT TOOL" : "ADD NEW TOOL"}
           </div>
-          <div style={{ height:1, background:"linear-gradient(90deg, #FFD700, rgba(255,215,0,0.3), transparent)", marginBottom:28, boxShadow:"0 0 8px rgba(255,215,0,0.4)" }} />
+          <div style={{ height:1, background:"linear-gradient(90deg, #00AAFF, rgba(0,170,255,0.3), transparent)", marginBottom:28, boxShadow:"0 0 8px rgba(0,170,255,0.4)" }} />
           {fields.map(([key,label,ph]) => (
             <div key={key} style={{ marginBottom:14 }}>
               <div style={{ fontSize:9, color:"#444", letterSpacing:"0.22em", textTransform:"uppercase", marginBottom:6, fontFamily:"'DM Mono',monospace" }}>{label}</div>
               <input value={form[key]} onChange={e => setForm(f => ({...f,[key]:e.target.value}))} placeholder={ph}
                 style={INPUT_STYLE}
-                onFocus={e => e.target.style.borderColor="rgba(255,215,0,0.5)"}
+                onFocus={e => e.target.style.borderColor="rgba(0,170,255,0.5)"}
                 onBlur={e => e.target.style.borderColor="#1a1a1a"} />
             </div>
           ))}
@@ -306,7 +306,7 @@ function Modal({ form, setForm, onSave, onClose, isEdit }) {
           </div>
           <div style={{ display:"flex", gap:10 }}>
             <button onClick={onSave}
-              style={{ flex:1, padding:"14px 0", background:"linear-gradient(135deg, #FFD700, #CC8800, #FFD700)", color:"#000", fontSize:14, fontWeight:700, letterSpacing:"0.16em", border:"none", borderRadius:8, cursor:"pointer", fontFamily:"'Bebas Neue','Anton',sans-serif", boxShadow:"0 0 24px rgba(255,215,0,0.5)" }}>
+              style={{ flex:1, padding:"14px 0", background:"linear-gradient(135deg, #00AAFF, #0077BB, #00AAFF)", color:"#fff", fontSize:14, fontWeight:700, letterSpacing:"0.16em", border:"none", borderRadius:8, cursor:"pointer", fontFamily:"'Bebas Neue','Anton',sans-serif", boxShadow:"0 0 24px rgba(0,170,255,0.5)" }}>
               {isEdit ? "SAVE CHANGES" : "ADD TOOL"}
             </button>
             <button onClick={onClose}
@@ -358,9 +358,9 @@ export default function Hub({ onNavigate }) {
           50%      { opacity: 0.055; }
         }
         ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-track { background: #000; }
-        ::-webkit-scrollbar-thumb { background: #FFD70033; border-radius: 2px; }
-        ::-webkit-scrollbar-thumb:hover { background: #FFD70066; }
+        ::-webkit-scrollbar-track { background: #111114; }
+        ::-webkit-scrollbar-thumb { background: #00AAFF33; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #00AAFF66; }
       `;
       document.head.appendChild(style);
     }
@@ -399,54 +399,54 @@ export default function Hub({ onNavigate }) {
   const liveCount = tools.filter(t => t.status==="live").length;
 
   const GOLD_GRAD = {
-    background:"linear-gradient(135deg, #FFE566 0%, #FFD700 30%, #FF8C00 65%, #FFD700 100%)",
+    background:"linear-gradient(135deg, #33CCFF 0%, #00AAFF 30%, #0088DD 65%, #00AAFF 100%)",
     WebkitBackgroundClip:"text", WebkitTextFillColor:"transparent", backgroundClip:"text",
-    filter:"drop-shadow(0 0 20px rgba(255,215,0,0.35))",
+    filter:"drop-shadow(0 0 20px rgba(0,170,255,0.35))",
   };
 
   return (
-    <div style={{ minHeight:"100vh", background:"#000", color:"#CCC", position:"relative", overflow:"hidden" }}>
+    <div style={{ minHeight:"100vh", background:"#111114", color:"#EEEEF2", position:"relative", overflow:"hidden" }}>
 
       {/* ── BACKGROUND LAYER ── */}
       {/* Deep grid */}
       <div style={{
         position:"fixed", inset:0, zIndex:0, pointerEvents:"none",
         backgroundImage:`
-          linear-gradient(rgba(255,215,0,0.04) 1px, transparent 1px),
-          linear-gradient(90deg, rgba(255,215,0,0.04) 1px, transparent 1px)
+          linear-gradient(rgba(0,170,255,0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0,170,255,0.04) 1px, transparent 1px)
         `,
         backgroundSize:"60px 60px",
         animation:"gridPulse 4s ease-in-out infinite",
       }} />
 
       {/* Radial orbs */}
-      <div style={{ position:"fixed", top:-200, left:"50%", width:900, height:600, borderRadius:"50%", background:"radial-gradient(ellipse, rgba(255,215,0,0.09) 0%, rgba(255,140,0,0.04) 40%, transparent 70%)", zIndex:0, pointerEvents:"none", animation:"orb1 6s ease-in-out infinite", transformOrigin:"center" }} />
+      <div style={{ position:"fixed", top:-200, left:"50%", width:900, height:600, borderRadius:"50%", background:"radial-gradient(ellipse, rgba(0,170,255,0.09) 0%, rgba(255,140,0,0.04) 40%, transparent 70%)", zIndex:0, pointerEvents:"none", animation:"orb1 6s ease-in-out infinite", transformOrigin:"center" }} />
       <div style={{ position:"fixed", bottom:-300, right:-200, width:700, height:700, borderRadius:"50%", background:"radial-gradient(ellipse, rgba(255,140,0,0.06) 0%, transparent 65%)", zIndex:0, pointerEvents:"none", animation:"orb2 8s ease-in-out infinite" }} />
-      <div style={{ position:"fixed", top:"40%", left:-150, width:400, height:400, borderRadius:"50%", background:"radial-gradient(ellipse, rgba(255,215,0,0.04) 0%, transparent 65%)", zIndex:0, pointerEvents:"none" }} />
+      <div style={{ position:"fixed", top:"40%", left:-150, width:400, height:400, borderRadius:"50%", background:"radial-gradient(ellipse, rgba(0,170,255,0.04) 0%, transparent 65%)", zIndex:0, pointerEvents:"none" }} />
 
       {/* Scanline */}
-      <div style={{ position:"fixed", left:0, right:0, height:2, background:"linear-gradient(90deg, transparent, rgba(255,215,0,0.06) 20%, rgba(255,215,0,0.12) 50%, rgba(255,215,0,0.06) 80%, transparent)", zIndex:1, pointerEvents:"none", animation:"scanline 8s linear infinite" }} />
+      <div style={{ position:"fixed", left:0, right:0, height:2, background:"linear-gradient(90deg, transparent, rgba(0,170,255,0.06) 20%, rgba(0,170,255,0.12) 50%, rgba(0,170,255,0.06) 80%, transparent)", zIndex:1, pointerEvents:"none", animation:"scanline 8s linear infinite" }} />
 
       <div style={{ position:"relative", zIndex:2 }}>
 
         {/* ── TOP BAR ── */}
         <div style={{
-          borderBottom:"1px solid rgba(255,215,0,0.08)",
+          borderBottom:"1px solid rgba(0,170,255,0.08)",
           padding:"14px 40px",
           display:"flex", alignItems:"center", justifyContent:"space-between",
           background:"rgba(0,0,0,0.88)",
           backdropFilter:"blur(24px)",
           position:"sticky", top:0, zIndex:100,
-          boxShadow:"0 1px 0 rgba(255,215,0,0.06), 0 0 40px rgba(0,0,0,0.8)",
+          boxShadow:"0 1px 0 rgba(0,170,255,0.06), 0 0 40px rgba(0,0,0,0.8)",
         }}>
           <div style={{ display:"flex", alignItems:"center", gap:18 }}>
             <div style={{
               width:44, height:44, borderRadius:9, flexShrink:0,
-              background:"linear-gradient(135deg, #FFE566 0%, #FFD700 40%, #884400 100%)",
+              background:"linear-gradient(135deg, #33CCFF 0%, #00AAFF 40%, #005599 100%)",
               display:"flex", alignItems:"center", justifyContent:"center",
-              fontSize:20, fontWeight:900, color:"#000",
+              fontSize:20, fontWeight:900, color:"#fff",
               fontFamily:"'Bebas Neue',sans-serif",
-              boxShadow:"0 0 20px rgba(255,215,0,0.7), 0 0 40px rgba(255,215,0,0.3)",
+              boxShadow:"0 0 20px rgba(0,170,255,0.7), 0 0 40px rgba(0,170,255,0.3)",
             }}>D</div>
             <div>
               <div style={{ fontSize:9, color:"#3a3a3a", letterSpacing:"0.3em", textTransform:"uppercase", fontFamily:"'DM Mono',monospace", marginBottom:2 }}>
@@ -483,36 +483,36 @@ export default function Hub({ onNavigate }) {
               onClick={() => onNavigate("setter-live")}
               style={{
                 padding:"9px 18px", fontSize:11, fontWeight:700, letterSpacing:"0.14em",
-                background:"transparent", color:"#FFD700",
-                border:"1px solid rgba(255,215,0,0.3)", borderRadius:6, cursor:"pointer",
+                background:"transparent", color:"#00AAFF",
+                border:"1px solid rgba(0,170,255,0.3)", borderRadius:6, cursor:"pointer",
                 fontFamily:"'DM Mono',monospace",
-                boxShadow:"0 0 12px rgba(255,215,0,0.15)",
+                boxShadow:"0 0 12px rgba(0,170,255,0.15)",
                 transition:"all 0.2s",
               }}
-              onMouseEnter={e => { e.target.style.background="rgba(255,215,0,0.08)"; e.target.style.boxShadow="0 0 20px rgba(255,215,0,0.3)"; e.target.style.borderColor="rgba(255,215,0,0.6)"; }}
-              onMouseLeave={e => { e.target.style.background="transparent"; e.target.style.boxShadow="0 0 12px rgba(255,215,0,0.15)"; e.target.style.borderColor="rgba(255,215,0,0.3)"; }}>
+              onMouseEnter={e => { e.target.style.background="rgba(0,170,255,0.08)"; e.target.style.boxShadow="0 0 20px rgba(0,170,255,0.3)"; e.target.style.borderColor="rgba(0,170,255,0.6)"; }}
+              onMouseLeave={e => { e.target.style.background="transparent"; e.target.style.boxShadow="0 0 12px rgba(0,170,255,0.15)"; e.target.style.borderColor="rgba(0,170,255,0.3)"; }}>
               ⬡ SETTER LIVE
             </button>
             <button
               onClick={openAdd}
               style={{
                 padding:"9px 22px", fontSize:12, fontWeight:700, letterSpacing:"0.18em",
-                background:"linear-gradient(135deg, #FFD700 0%, #CC8800 50%, #FFD700 100%)",
+                background:"linear-gradient(135deg, #00AAFF 0%, #0077BB 50%, #00AAFF 100%)",
                 color:"#000", border:"none", borderRadius:7, cursor:"pointer",
                 fontFamily:"'Bebas Neue','Anton',sans-serif",
-                boxShadow:"0 0 20px rgba(255,215,0,0.45), 0 0 40px rgba(255,215,0,0.15)",
+                boxShadow:"0 0 20px rgba(0,170,255,0.45), 0 0 40px rgba(0,170,255,0.15)",
                 transition:"all 0.2s",
               }}
-              onMouseEnter={e => { e.target.style.boxShadow="0 0 36px rgba(255,215,0,0.8), 0 0 60px rgba(255,215,0,0.3)"; e.target.style.transform="translateY(-1px)"; }}
-              onMouseLeave={e => { e.target.style.boxShadow="0 0 20px rgba(255,215,0,0.45), 0 0 40px rgba(255,215,0,0.15)"; e.target.style.transform="none"; }}>
+              onMouseEnter={e => { e.target.style.boxShadow="0 0 36px rgba(0,170,255,0.8), 0 0 60px rgba(0,170,255,0.3)"; e.target.style.transform="translateY(-1px)"; }}
+              onMouseLeave={e => { e.target.style.boxShadow="0 0 20px rgba(0,170,255,0.45), 0 0 40px rgba(0,170,255,0.15)"; e.target.style.transform="none"; }}>
               + ADD TOOL
             </button>
           </div>
         </div>
 
         {/* ── HERO ── */}
-        <div style={{ padding:"80px 40px 64px", borderBottom:"1px solid rgba(255,215,0,0.05)", position:"relative" }}>
-          <div style={{ width:64, height:3, background:"linear-gradient(90deg, #FFE566, #FFD700, #FF8C00)", borderRadius:2, marginBottom:28, boxShadow:"0 0 20px rgba(255,215,0,0.8), 0 0 40px rgba(255,215,0,0.4)" }} />
+        <div style={{ padding:"80px 40px 64px", borderBottom:"1px solid rgba(0,170,255,0.05)", position:"relative" }}>
+          <div style={{ width:64, height:3, background:"linear-gradient(90deg, #33CCFF, #00AAFF, #0088DD)", borderRadius:2, marginBottom:28, boxShadow:"0 0 20px rgba(0,170,255,0.8), 0 0 40px rgba(0,170,255,0.4)" }} />
           <div style={{ fontSize:10, color:"#3a3a3a", letterSpacing:"0.32em", textTransform:"uppercase", marginBottom:16, fontFamily:"'DM Mono',monospace" }}>
             JP Campbell · Sales Director · Division 2
           </div>
@@ -530,17 +530,17 @@ export default function Hub({ onNavigate }) {
         </div>
 
         {/* ── FILTERS ── */}
-        <div style={{ padding:"12px 40px", display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", borderBottom:"1px solid rgba(255,215,0,0.04)", background:"rgba(0,0,0,0.6)", backdropFilter:"blur(12px)" }}>
+        <div style={{ padding:"12px 40px", display:"flex", alignItems:"center", gap:10, flexWrap:"wrap", borderBottom:"1px solid rgba(0,170,255,0.04)", background:"rgba(0,0,0,0.6)", backdropFilter:"blur(12px)" }}>
           <div style={{ display:"flex", gap:6, flex:1, flexWrap:"wrap" }}>
             {CATEGORIES.map(cat => (
               <button key={cat} onClick={() => setFilter(cat)}
                 style={{
                   padding:"6px 16px", fontSize:10, borderRadius:5, cursor:"pointer",
-                  border:filter===cat ? "1px solid rgba(255,215,0,0.5)" : "1px solid #111",
-                  background:filter===cat ? "rgba(255,215,0,0.08)" : "rgba(0,0,0,0.6)",
-                  color:filter===cat ? "#FFD700" : "#444",
+                  border:filter===cat ? "1px solid rgba(0,170,255,0.5)" : "1px solid #111",
+                  background:filter===cat ? "rgba(0,170,255,0.08)" : "rgba(0,0,0,0.6)",
+                  color:filter===cat ? "#00AAFF" : "#444",
                   fontFamily:"'DM Mono',monospace", letterSpacing:"0.1em",
-                  boxShadow:filter===cat ? "0 0 12px rgba(255,215,0,0.25)" : "none",
+                  boxShadow:filter===cat ? "0 0 12px rgba(0,170,255,0.25)" : "none",
                   transition:"all 0.15s",
                 }}>
                 {cat}
@@ -549,7 +549,7 @@ export default function Hub({ onNavigate }) {
           </div>
           <input placeholder="SEARCH..." value={search} onChange={e => setSearch(e.target.value)}
             style={{...INPUT_STYLE, width:190, fontSize:11, letterSpacing:"0.12em", background:"rgba(0,0,0,0.8)"}}
-            onFocus={e => e.target.style.borderColor="rgba(255,215,0,0.5)"}
+            onFocus={e => e.target.style.borderColor="rgba(0,170,255,0.5)"}
             onBlur={e  => e.target.style.borderColor="#1a1a1a"} />
         </div>
 
@@ -563,7 +563,7 @@ export default function Hub({ onNavigate }) {
           <div
             onClick={openAdd}
             style={{ borderRadius:14, padding:"1.5px", background:"linear-gradient(135deg, #111, #0a0a0a)", cursor:"pointer", minHeight:250, transition:"all 0.25s" }}
-            onMouseEnter={e => { e.currentTarget.style.background="linear-gradient(135deg, #FFD700, #CC6600, #FFD700)"; e.currentTarget.style.boxShadow="0 0 30px rgba(255,215,0,0.2)"; }}
+            onMouseEnter={e => { e.currentTarget.style.background="linear-gradient(135deg, #00AAFF, #0066AA, #00AAFF)"; e.currentTarget.style.boxShadow="0 0 30px rgba(0,170,255,0.2)"; }}
             onMouseLeave={e => { e.currentTarget.style.background="linear-gradient(135deg, #111, #0a0a0a)"; e.currentTarget.style.boxShadow="none"; }}>
             <div style={{ borderRadius:13, height:"100%", minHeight:247, background:"#040404", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", gap:14 }}>
               <div style={{ fontSize:32, color:"#1a1a1a", fontWeight:300 }}>+</div>
@@ -574,13 +574,13 @@ export default function Hub({ onNavigate }) {
 
         {visible.length === 0 && (
           <div style={{ textAlign:"center", padding:"100px 40px" }}>
-            <div style={{ fontSize:42, fontFamily:"'Bebas Neue',sans-serif", letterSpacing:"0.1em", color:"#1a1a1a", textShadow:"0 0 30px rgba(255,215,0,0.1)", marginBottom:10 }}>NO TOOLS FOUND</div>
+            <div style={{ fontSize:42, fontFamily:"'Bebas Neue',sans-serif", letterSpacing:"0.1em", color:"#1a1a1a", textShadow:"0 0 30px rgba(0,170,255,0.1)", marginBottom:10 }}>NO TOOLS FOUND</div>
             <div style={{ fontSize:11, fontFamily:"'DM Mono',monospace", letterSpacing:"0.1em", color:"#222" }}>Adjust your filter or add a new tool</div>
           </div>
         )}
 
         {/* ── FOOTER ── */}
-        <div style={{ padding:"24px 40px", borderTop:"1px solid rgba(255,215,0,0.04)", display:"flex", justifyContent:"space-between", alignItems:"center", background:"rgba(0,0,0,0.7)" }}>
+        <div style={{ padding:"24px 40px", borderTop:"1px solid rgba(0,170,255,0.04)", display:"flex", justifyContent:"space-between", alignItems:"center", background:"rgba(0,0,0,0.7)" }}>
           <div style={{ fontSize:9, color:"#1e1e1e", letterSpacing:"0.2em", fontFamily:"'DM Mono',monospace" }}>DDBA · DIVISION 2 · DELUCA DESIGNS LLC · 2026</div>
           <div style={{ fontSize:9, color:"#1e1e1e", letterSpacing:"0.18em", fontFamily:"'DM Mono',monospace" }}>INVENT YOUR FUTURE.</div>
         </div>

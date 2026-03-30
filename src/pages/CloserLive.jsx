@@ -13,30 +13,35 @@ const SETTER_KEYS  = [
 ];
 
 const C = {
-  gold:"#FFD700",goldGlow:"rgba(255,215,0,0.8)",goldDim:"rgba(255,215,0,0.12)",goldBorder:"rgba(255,215,0,0.35)",
+  // Primary — electric blue (was gold)
+  gold:"#00AAFF",goldGlow:"rgba(0,170,255,0.8)",goldDim:"rgba(0,170,255,0.12)",goldBorder:"rgba(0,170,255,0.35)",
+  // Success — neon green
   green:"#00FF88",greenGlow:"rgba(0,255,136,0.8)",greenDim:"rgba(0,255,136,0.10)",greenBorder:"rgba(0,255,136,0.35)",
+  // Danger
   red:"#FF4444",redGlow:"rgba(255,68,68,0.8)",redDim:"rgba(255,68,68,0.10)",redBorder:"rgba(255,68,68,0.35)",
+  // Warning
   amber:"#FFB800",amberGlow:"rgba(255,184,0,0.8)",amberDim:"rgba(255,184,0,0.12)",amberBorder:"rgba(255,184,0,0.35)",
-  blue:"#44AAFF",blueDim:"rgba(68,170,255,0.10)",blueBorder:"rgba(68,170,255,0.35)",
+  // Cyan accent
+  blue:"#00CCFF",blueDim:"rgba(0,204,255,0.10)",blueBorder:"rgba(0,204,255,0.35)",
   orange:"#FF9944",orangeDim:"rgba(255,153,68,0.10)",orangeBorder:"rgba(255,153,68,0.35)",
-  purple:"#CC99FF",purpleDim:"rgba(204,153,255,0.10)",purpleBorder:"rgba(204,153,255,0.35)",
+  purple:"#AA88FF",purpleDim:"rgba(170,136,255,0.10)",purpleBorder:"rgba(170,136,255,0.35)",
   teal:"#00DDCC",tealDim:"rgba(0,221,204,0.10)",tealBorder:"rgba(0,221,204,0.35)",
-  t1:"#F5F5F5",t2:"#BEBEBE",t3:"#909090",t4:"#585858",
-  bg:"#000000",s1:"#0D0D0D",s2:"#141414",s3:"#1E1E1E",
-  border:"#2A2A2A",borderHi:"#484848",
+  t1:"#EEEEF2",t2:"#AAAAB8",t3:"#70708A",t4:"#44445A",
+  bg:"#111114",s1:"#161619",s2:"#1C1C20",s3:"#242428",
+  border:"#2A2A32",borderHi:"#3E3E4E",
 };
 
 export const STAGES = [
-  {key:"booked",   label:"Booked",        color:C.gold,  glow:C.goldGlow,  dim:C.goldDim,   border:C.goldBorder,  trap:false},
-  {key:"ssTaken",  label:"SS Taken",       color:C.blue,  glow:"rgba(68,170,255,0.8)", dim:C.blueDim,  border:C.blueBorder,  trap:false},
-  {key:"noshow",   label:"No-Show",        color:C.red,   glow:C.redGlow,   dim:C.redDim,    border:C.redBorder,   trap:true },
-  {key:"cancelled",label:"Cancelled",      color:C.orange,glow:"rgba(255,153,68,0.8)",dim:C.orangeDim,border:C.orangeBorder,trap:false},
-  {key:"offer",    label:"Offer Made",     color:"#44AAFF",glow:"rgba(68,170,255,0.8)",dim:C.blueDim, border:C.blueBorder,  trap:false},
-  {key:"verbal",   label:"Verbal Yes",     color:C.amber, glow:C.amberGlow, dim:C.amberDim,  border:C.amberBorder, trap:true },
-  {key:"deposit",  label:"Deposit",        color:C.purple,glow:"rgba(204,153,255,0.8)",dim:C.purpleDim,border:C.purpleBorder,trap:false},
-  {key:"closed",   label:"Closed",         color:C.green, glow:C.greenGlow, dim:C.greenDim,  border:C.greenBorder, trap:false},
-  {key:"reoffer",  label:"Re-offer Sched.",color:C.teal,  glow:"rgba(0,221,204,0.8)", dim:C.tealDim,  border:C.tealBorder,  trap:false},
-  {key:"handedoff",label:"Handed Off",     color:C.green, glow:C.greenGlow, dim:C.greenDim,  border:C.greenBorder, trap:false},
+  {key:"booked",   label:"Booked",        color:"#00AAFF",glow:"rgba(0,170,255,0.8)",  dim:"rgba(0,170,255,0.12)",  border:"rgba(0,170,255,0.35)",  trap:false},
+  {key:"ssTaken",  label:"SS Taken",       color:"#00CCFF",glow:"rgba(0,204,255,0.8)",  dim:"rgba(0,204,255,0.10)",  border:"rgba(0,204,255,0.35)",  trap:false},
+  {key:"noshow",   label:"No-Show",        color:"#FF4444",glow:"rgba(255,68,68,0.8)",  dim:"rgba(255,68,68,0.10)",  border:"rgba(255,68,68,0.35)",  trap:true },
+  {key:"cancelled",label:"Cancelled",      color:"#FF9944",glow:"rgba(255,153,68,0.8)", dim:"rgba(255,153,68,0.10)", border:"rgba(255,153,68,0.35)", trap:false},
+  {key:"offer",    label:"Offer Made",     color:"#00CCFF",glow:"rgba(0,204,255,0.8)",  dim:"rgba(0,204,255,0.10)",  border:"rgba(0,204,255,0.35)",  trap:false},
+  {key:"verbal",   label:"Verbal Yes",     color:"#FFB800",glow:"rgba(255,184,0,0.8)",  dim:"rgba(255,184,0,0.12)",  border:"rgba(255,184,0,0.35)",  trap:true },
+  {key:"deposit",  label:"Deposit",        color:"#AA88FF",glow:"rgba(170,136,255,0.8)",dim:"rgba(170,136,255,0.10)",border:"rgba(170,136,255,0.35)",trap:false},
+  {key:"closed",   label:"Closed",         color:"#00FF88",glow:"rgba(0,255,136,0.8)",  dim:"rgba(0,255,136,0.10)",  border:"rgba(0,255,136,0.35)",  trap:false},
+  {key:"reoffer",  label:"Re-offer Sched.",color:"#00DDCC",glow:"rgba(0,221,204,0.8)",  dim:"rgba(0,221,204,0.10)",  border:"rgba(0,221,204,0.35)",  trap:false},
+  {key:"handedoff",label:"Handed Off",     color:"#00FF88",glow:"rgba(0,255,136,0.8)",  dim:"rgba(0,255,136,0.10)",  border:"rgba(0,255,136,0.35)",  trap:false},
 ];
 const SM = {};
 STAGES.forEach(s => SM[s.key] = s);
@@ -80,7 +85,7 @@ function useStyles() {
     const s=document.createElement("style"); s.id="cl-styles";
     s.textContent=`@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap');
 @keyframes liveDot{0%,100%{box-shadow:0 0 5px 2px rgba(0,255,136,0.9),0 0 12px rgba(0,255,136,0.5)}50%{box-shadow:0 0 9px 4px rgba(0,255,136,1),0 0 22px rgba(0,255,136,0.7)}}
-@keyframes goldDot{0%,100%{box-shadow:0 0 5px 2px rgba(255,215,0,0.9),0 0 12px rgba(255,215,0,0.5)}50%{box-shadow:0 0 9px 4px rgba(255,215,0,1),0 0 22px rgba(255,215,0,0.7)}}
+@keyframes goldDot{0%,100%{box-shadow:0 0 5px 2px rgba(0,170,255,0.9),0 0 12px rgba(0,170,255,0.5)}50%{box-shadow:0 0 9px 4px rgba(0,170,255,1),0 0 22px rgba(0,170,255,0.7)}}
 @keyframes amberP{0%,100%{box-shadow:0 0 8px rgba(255,184,0,0.5)}50%{box-shadow:0 0 16px rgba(255,184,0,0.9)}}
 @keyframes scanline{0%{top:-2px}100%{top:100%}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -336,9 +341,9 @@ function CloserEOD({pipeline,history,onHistoryUpdate}) {
         <NbCard label="⚡ One Fix for Tomorrow" gold><textarea style={{...NBTA,fontSize:15}} value={nb.oneFix} onChange={e=>setNb(p=>({...p,oneFix:e.target.value}))} placeholder="What specifically did not work today — and what specifically changes tomorrow? Not a placeholder. Something real."/></NbCard>
       </div>
       <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
-        <button onClick={pushReport} style={{flex:2,minWidth:200,padding:"18px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,fontWeight:900,letterSpacing:"0.18em",background:`linear-gradient(135deg,#FFE566,${C.gold},#CC8800,${C.gold})`,color:"#000",border:"none",borderRadius:6,cursor:"pointer",boxShadow:`0 0 28px ${C.goldGlow},0 0 56px rgba(255,215,0,0.25)`,transition:"all 0.2s"}}
-          onMouseEnter={e=>{e.target.style.boxShadow=`0 0 48px ${C.goldGlow},0 0 90px rgba(255,215,0,0.4)`;e.target.style.transform="translateY(-2px)";}}
-          onMouseLeave={e=>{e.target.style.boxShadow=`0 0 28px ${C.goldGlow},0 0 56px rgba(255,215,0,0.25)`;e.target.style.transform="none";}}>⬆ PUSH EOD REPORT</button>
+        <button onClick={pushReport} style={{flex:2,minWidth:200,padding:"18px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,fontWeight:900,letterSpacing:"0.18em",background:`linear-gradient(135deg,#33CCFF,#00AAFF,#0077CC,#00AAFF)`,color:"#fff",border:"none",borderRadius:6,cursor:"pointer",boxShadow:`0 0 28px rgba(0,170,255,0.6),0 0 56px rgba(0,170,255,0.25)`,transition:"all 0.2s"}}
+          onMouseEnter={e=>{e.target.style.boxShadow=`0 0 48px rgba(0,170,255,0.8),0 0 90px rgba(0,170,255,0.4)`;e.target.style.transform="translateY(-2px)";}}
+          onMouseLeave={e=>{e.target.style.boxShadow=`0 0 28px rgba(0,170,255,0.6),0 0 56px rgba(0,170,255,0.25)`;e.target.style.transform="none";}}>⬆ PUSH EOD REPORT</button>
         <button style={{flex:1,minWidth:110,padding:"18px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:"transparent",border:`2px solid ${C.border}`,color:C.t2,borderRadius:6,cursor:"pointer",transition:"all 0.15s"}}
           onMouseEnter={e=>{e.target.style.borderColor=C.borderHi;e.target.style.color=C.t1;}} onMouseLeave={e=>{e.target.style.borderColor=C.border;e.target.style.color=C.t2;}}>SAVE DRAFT</button>
         <button onClick={()=>{if(window.confirm("Reset today? Pipeline data not affected.")) resetDay();}} style={{flex:1,minWidth:110,padding:"18px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:"transparent",border:`2px solid ${C.redBorder}`,color:C.red,borderRadius:6,cursor:"pointer",transition:"all 0.15s"}}
@@ -603,12 +608,12 @@ export default function CloserLive({onNavigate}) {
   const TABS=[{key:"eod",label:"EOD Tracker"},{key:"pipeline",label:"Pipeline"},{key:"graphs",label:"📈 Graphs"}];
 
   return (
-    <div style={{minHeight:"100vh",background:"#000000",color:C.t1}}>
-      <div style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(rgba(255,215,0,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,215,0,0.022) 1px,transparent 1px)`,backgroundSize:"60px 60px",pointerEvents:"none",zIndex:0}}/>
-      <div style={{position:"fixed",top:-200,left:"50%",transform:"translateX(-50%)",width:900,height:600,background:`radial-gradient(ellipse,rgba(255,215,0,0.07) 0%,transparent 65%)`,pointerEvents:"none",zIndex:0}}/>
-      <div style={{position:"fixed",left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,rgba(255,215,0,0.08) 20%,rgba(255,215,0,0.06) 50%,rgba(255,215,0,0.08) 80%,transparent)`,animation:"scanline 7s linear infinite",pointerEvents:"none",zIndex:1}}/>
+    <div style={{minHeight:"100vh",background:"#111114",color:C.t1}}>
+      <div style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(rgba(0,170,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,170,255,0.025) 1px,transparent 1px)`,backgroundSize:"60px 60px",pointerEvents:"none",zIndex:0}}/>
+      <div style={{position:"fixed",top:-200,left:"50%",transform:"translateX(-50%)",width:900,height:600,background:`radial-gradient(ellipse,rgba(0,170,255,0.08) 0%,transparent 65%)`,pointerEvents:"none",zIndex:0}}/>
+      <div style={{position:"fixed",left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,rgba(0,170,255,0.12) 20%,rgba(0,204,255,0.08) 50%,rgba(0,170,255,0.12) 80%,transparent)`,animation:"scanline 7s linear infinite",pointerEvents:"none",zIndex:1}}/>
       <div style={{position:"relative",zIndex:2}}>
-        <div style={{background:"rgba(0,0,0,0.92)",borderBottom:`2px solid rgba(255,215,0,0.12)`,padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,backdropFilter:"blur(20px)"}}>
+        <div style={{background:"rgba(17,17,20,0.94)",borderBottom:`2px solid rgba(0,170,255,0.15)`,padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,backdropFilter:"blur(20px)"}}>
           <div style={{display:"flex",alignItems:"center",gap:14}}>
             <div style={{width:8,height:8,borderRadius:"50%",background:C.gold,animation:"goldDot 2s ease-in-out infinite",flexShrink:0}}/>
             <span style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:20,letterSpacing:"0.1em",color:C.gold,textShadow:`0 0 14px ${C.goldGlow}`}}>JP // CLOSER LIVE</span>

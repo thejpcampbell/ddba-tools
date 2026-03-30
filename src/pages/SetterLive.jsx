@@ -9,10 +9,10 @@ const TODAY_D = new Date().toLocaleDateString("en-US",{weekday:"long",year:"nume
 
 // TRUE NEON color system — no pastels
 const C = {
-  gold:        "#FFD700",
-  goldGlow:    "rgba(255,215,0,0.8)",
-  goldDim:     "rgba(255,215,0,0.12)",
-  goldBorder:  "rgba(255,215,0,0.35)",
+  gold:        "#00AAFF",
+  goldGlow:    "rgba(0,170,255,0.8)",
+  goldDim:     "rgba(0,170,255,0.12)",
+  goldBorder:  "rgba(0,170,255,0.35)",
   green:       "#00FF88",
   greenGlow:   "rgba(0,255,136,0.8)",
   greenDim:    "rgba(0,255,136,0.10)",
@@ -21,22 +21,22 @@ const C = {
   redGlow:     "rgba(255,68,68,0.8)",
   redDim:      "rgba(255,68,68,0.10)",
   redBorder:   "rgba(255,68,68,0.35)",
-  purple:      "#CC99FF",
-  purpleGlow:  "rgba(204,153,255,0.8)",
-  purpleDim:   "rgba(204,153,255,0.10)",
-  purpleBorder:"rgba(204,153,255,0.35)",
-  blue:        "#44AAFF",
+  purple:      "#AA88FF",
+  purpleGlow:  "rgba(170,136,255,0.8)",
+  purpleDim:   "rgba(170,136,255,0.10)",
+  purpleBorder:"rgba(170,136,255,0.35)",
+  blue:        "#00CCFF",
   orange:      "#FF9944",
-  t1:  "#F5F5F5",
-  t2:  "#BEBEBE",
-  t3:  "#909090",
-  t4:  "#585858",
-  bg:  "#000000",
-  s1:  "#0D0D0D",
-  s2:  "#141414",
-  s3:  "#1E1E1E",
-  border:   "#2A2A2A",
-  borderHi: "#484848",
+  t1:  "#EEEEF2",
+  t2:  "#AAAAB8",
+  t3:  "#70708A",
+  t4:  "#44445A",
+  bg:  "#111114",
+  s1:  "#161619",
+  s2:  "#1C1C20",
+  s3:  "#242428",
+  border:   "#2A2A32",
+  borderHi: "#3E3E4E",
 };
 
 const STAGES = [
@@ -93,8 +93,8 @@ function useGlobalStyles() {
       input[type=number]{ -moz-appearance:textfield; }
       ::-webkit-scrollbar{ width:4px; }
       ::-webkit-scrollbar-track{ background:#000; }
-      ::-webkit-scrollbar-thumb{ background:#FFD70040; border-radius:2px; }
-      ::-webkit-scrollbar-thumb:hover{ background:#FFD70080; }
+      ::-webkit-scrollbar-thumb{ background:#00AAFF40; border-radius:2px; }
+      ::-webkit-scrollbar-thumb:hover{ background:#00AAFF80; }
     `;
     document.head.appendChild(s);
   }, []);
@@ -538,9 +538,9 @@ function SetterView({ rep }) {
       {/* Actions */}
       <div style={{display:"flex",gap:12,flexWrap:"wrap"}}>
         <button onClick={pushReport}
-          style={{flex:2,minWidth:200,padding:"18px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,fontWeight:900,letterSpacing:"0.18em",background:`linear-gradient(135deg,#FFE566,${C.gold},#CC8800,${C.gold})`,color:"#000",border:"none",borderRadius:6,cursor:"pointer",boxShadow:`0 0 28px ${C.goldGlow},0 0 56px rgba(255,215,0,0.25)`,transition:"all 0.2s"}}
+          style={{flex:2,minWidth:200,padding:"18px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:20,fontWeight:900,letterSpacing:"0.18em",background:`linear-gradient(135deg,#33CCFF,${C.gold},#0077BB,${C.gold})`,color:"#fff",border:"none",borderRadius:6,cursor:"pointer",boxShadow:`0 0 28px ${C.goldGlow},0 0 56px rgba(0,170,255,0.25)`,transition:"all 0.2s"}}
           onMouseEnter={e=>{e.target.style.boxShadow=`0 0 48px ${C.goldGlow},0 0 90px rgba(255,215,0,0.4)`;e.target.style.transform="translateY(-2px)";}}
-          onMouseLeave={e=>{e.target.style.boxShadow=`0 0 28px ${C.goldGlow},0 0 56px rgba(255,215,0,0.25)`;e.target.style.transform="none";}}>
+          onMouseLeave={e=>{e.target.style.boxShadow=`0 0 28px ${C.goldGlow},0 0 56px rgba(0,170,255,0.25)`;e.target.style.transform="none";}}>
           ⬆ PUSH REPORT
         </button>
         <button style={{flex:1,minWidth:110,padding:"18px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:"transparent",border:`2px solid ${C.border}`,color:C.t2,borderRadius:6,cursor:"pointer",transition:"all 0.15s"}}
@@ -568,7 +568,7 @@ function SetterView({ rep }) {
             </div>
             <div style={{padding:"16px 24px",borderTop:`1px solid ${C.border}`,display:"flex",gap:10}}>
               <button onClick={()=>navigator.clipboard.writeText(reportTxt).catch(()=>{})}
-                style={{flex:1,padding:"13px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#CC8800)`,color:"#000",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 20px ${C.goldGlow}`}}>
+                style={{flex:1,padding:"13px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#0077BB)`,color:"#fff",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 20px ${C.goldGlow}`}}>
                 COPY TO CLIPBOARD
               </button>
               <button onClick={()=>{navigator.clipboard.writeText(reportTxt).catch(()=>{}); setShowReport(false); resetDay();}}
@@ -733,7 +733,7 @@ function PipelinePanel({ rep }) {
       {/* Toolbar */}
       <div style={{display:"flex",alignItems:"center",gap:10,flexWrap:"wrap",marginBottom:16}}>
         <button onClick={openAdd}
-          style={{padding:"10px 22px",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#CC8800)`,color:"#000",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 16px ${C.goldGlow}`}}>
+          style={{padding:"10px 22px",fontFamily:"'Bebas Neue',sans-serif",fontSize:15,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#0077BB)`,color:"#fff",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 16px ${C.goldGlow}`}}>
           + ADD CONVERSATION
         </button>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",marginLeft:"auto"}}>
@@ -868,7 +868,7 @@ function PipelinePanel({ rep }) {
 
             <div style={{padding:"16px 24px",borderTop:`1px solid ${C.border}`,display:"flex",gap:10}}>
               <button onClick={save}
-                style={{flex:1,padding:"14px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#CC8800)`,color:"#000",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 20px ${C.goldGlow}`}}>
+                style={{flex:1,padding:"14px 0",fontFamily:"'Bebas Neue',sans-serif",fontSize:16,letterSpacing:"0.14em",background:`linear-gradient(135deg,${C.gold},#0077BB)`,color:"#fff",border:"none",borderRadius:5,cursor:"pointer",boxShadow:`0 0 20px ${C.goldGlow}`}}>
                 SAVE
               </button>
               <button onClick={()=>{setShowAdd(false);setEditId(null);}}
@@ -892,11 +892,11 @@ function RolePicker({ onPick, onBack }) {
     <div style={{minHeight:"100vh",background:C.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:48,padding:32,position:"relative",overflow:"hidden"}}>
       <div style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(rgba(255,215,0,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(255,215,0,0.03) 1px,transparent 1px)`,backgroundSize:"60px 60px",pointerEvents:"none"}} />
       <div style={{position:"fixed",top:-200,left:"50%",transform:"translateX(-50%)",width:800,height:600,background:`radial-gradient(ellipse,rgba(255,215,0,0.1) 0%,transparent 65%)`,pointerEvents:"none"}} />
-      <div style={{position:"fixed",left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,${C.goldDim} 20%,rgba(255,215,0,0.08) 50%,${C.goldDim} 80%,transparent)`,animation:"scanline 7s linear infinite",pointerEvents:"none"}} />
+      <div style={{position:"fixed",left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,${C.goldDim} 20%,rgba(0,170,255,0.08) 50%,${C.goldDim} 80%,transparent)`,animation:"scanline 7s linear infinite",pointerEvents:"none"}} />
 
       <div style={{position:"relative",zIndex:2,textAlign:"center"}}>
         <div style={{fontFamily:"'DM Mono',monospace",fontSize:10,letterSpacing:"0.32em",color:C.t4,textTransform:"uppercase",marginBottom:14}}>DDBA · DIVISION 2 · SETTER LIVE</div>
-        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(56px,11vw,96px)",fontWeight:900,lineHeight:0.9,letterSpacing:"0.04em",background:`linear-gradient(135deg,#FFE566 0%,${C.gold} 30%,#FF8C00 65%,${C.gold} 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",filter:`drop-shadow(0 0 28px rgba(255,215,0,0.5))`,marginBottom:14}}>
+        <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:"clamp(56px,11vw,96px)",fontWeight:900,lineHeight:0.9,letterSpacing:"0.04em",background:`linear-gradient(135deg,#33CCFF 0%,${C.gold} 30%,#0088DD 65%,${C.gold} 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",filter:`drop-shadow(0 0 28px rgba(0,170,255,0.5))`,marginBottom:14}}>
           SETTER LIVE<br />DASHBOARD
         </div>
         <div style={{fontFamily:"'DM Mono',monospace",fontSize:13,color:C.t3,letterSpacing:"0.08em"}}>{TODAY_D}</div>
@@ -906,10 +906,10 @@ function RolePicker({ onPick, onBack }) {
         {[{name:"Liz",sub:"Setter View"},{name:"Chantal",sub:"Setter View"},{name:"JP",sub:"Command View"}].map(({name,sub})=>(
           <button key={name} onClick={()=>onPick(name)}
             style={{width:220,padding:0,borderRadius:10,border:`1.5px solid ${C.border}`,background:C.s1,cursor:"pointer",overflow:"hidden",transition:"all 0.25s",textAlign:"left"}}
-            onMouseEnter={e=>{e.currentTarget.style.borderColor=C.goldBorder;e.currentTarget.style.boxShadow=`0 0 28px rgba(255,215,0,0.2),0 0 56px rgba(255,215,0,0.08)`;e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.background=C.s2;}}
+            onMouseEnter={e=>{e.currentTarget.style.borderColor=C.goldBorder;e.currentTarget.style.boxShadow=`0 0 28px rgba(255,215,0,0.2),0 0 56px rgba(0,170,255,0.08)`;e.currentTarget.style.transform="translateY(-4px)";e.currentTarget.style.background=C.s2;}}
             onMouseLeave={e=>{e.currentTarget.style.borderColor=C.border;e.currentTarget.style.boxShadow="none";e.currentTarget.style.transform="none";e.currentTarget.style.background=C.s1;}}>
             <div style={{padding:"28px 24px 26px"}}>
-              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:40,fontWeight:900,letterSpacing:"0.1em",lineHeight:1,background:`linear-gradient(135deg,#FFE566,${C.gold},#FF8C00)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",filter:`drop-shadow(0 0 8px rgba(255,215,0,0.6))`,marginBottom:8,whiteSpace:"nowrap"}}>
+              <div style={{fontFamily:"'Bebas Neue',sans-serif",fontSize:40,fontWeight:900,letterSpacing:"0.1em",lineHeight:1,background:`linear-gradient(135deg,#33CCFF,${C.gold},#0088DD)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent",backgroundClip:"text",filter:`drop-shadow(0 0 8px rgba(0,170,255,0.6))`,marginBottom:8,whiteSpace:"nowrap"}}>
                 {name.toUpperCase()}
               </div>
               <div style={{fontFamily:"'DM Mono',monospace",fontSize:10,letterSpacing:"0.16em",color:C.t3,textTransform:"uppercase"}}>{sub}</div>
@@ -1017,13 +1017,13 @@ export default function SetterLive({ onNavigate }) {
 
   return (
     <div style={{minHeight:"100vh",background:C.bg,color:C.t1}}>
-      <div style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(rgba(255,215,0,0.022) 1px,transparent 1px),linear-gradient(90deg,rgba(255,215,0,0.022) 1px,transparent 1px)`,backgroundSize:"60px 60px",pointerEvents:"none",zIndex:0}} />
-      <div style={{position:"fixed",top:-200,left:"50%",transform:"translateX(-50%)",width:900,height:600,background:`radial-gradient(ellipse,rgba(255,215,0,0.07) 0%,transparent 65%)`,pointerEvents:"none",zIndex:0}} />
-      <div style={{position:"fixed",left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,${C.goldDim} 20%,rgba(255,215,0,0.07) 50%,${C.goldDim} 80%,transparent)`,animation:"scanline 7s linear infinite",pointerEvents:"none",zIndex:1}} />
+      <div style={{position:"fixed",inset:0,backgroundImage:`linear-gradient(rgba(0,170,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,170,255,0.025) 1px,transparent 1px)`,backgroundSize:"60px 60px",pointerEvents:"none",zIndex:0}} />
+      <div style={{position:"fixed",top:-200,left:"50%",transform:"translateX(-50%)",width:900,height:600,background:`radial-gradient(ellipse,rgba(0,170,255,0.08) 0%,transparent 65%)`,pointerEvents:"none",zIndex:0}} />
+      <div style={{position:"fixed",left:0,right:0,height:2,background:`linear-gradient(90deg,transparent,rgba(0,170,255,0.12) 20%,rgba(0,204,255,0.08) 50%,rgba(0,170,255,0.12) 80%,transparent)`,animation:"scanline 7s linear infinite",pointerEvents:"none",zIndex:1}} />
 
       <div style={{position:"relative",zIndex:2}}>
         {/* Header */}
-        <div style={{background:"rgba(0,0,0,0.92)",borderBottom:`2px solid rgba(255,215,0,0.12)`,padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,backdropFilter:"blur(20px)",boxShadow:`0 0 40px rgba(0,0,0,0.8),0 2px 0 rgba(255,215,0,0.06)`}}>
+        <div style={{background:"rgba(17,17,20,0.94)",borderBottom:`2px solid rgba(0,170,255,0.15)`,padding:"14px 28px",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,zIndex:100,backdropFilter:"blur(20px)",boxShadow:`0 0 40px rgba(0,0,0,0.8),0 2px 0 rgba(0,170,255,0.08)`}}>
           <div style={{display:"flex",alignItems:"center",gap:16}}>
             <button onClick={()=>setRole(null)}
               style={{fontFamily:"'DM Mono',monospace",fontSize:11,letterSpacing:"0.12em",color:C.t3,background:"none",border:`1px solid ${C.border}`,borderRadius:4,padding:"7px 14px",cursor:"pointer",transition:"all 0.15s"}}
