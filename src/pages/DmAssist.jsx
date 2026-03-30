@@ -328,17 +328,21 @@ export default function DmAssist({ onNavigate }) {
         method: "POST",
         headers: { "Content-Type":"application/json" },
         body: JSON.stringify({
-          model:      "claude-sonnet-4-20250514",
+          model:      "claude-sonnet-4-5",
           max_tokens: 1500,
           system:     SYSTEM_PROMPT,
           messages:   next,
         }),
       });
       const data = await res.json();
-      const reply = data.content?.filter(b => b.type==="text").map(b => b.text).join("\n") || "No response.";
+      if (!res.ok) {
+        setMessages(m => [...m, { role:"assistant", content:`API error: ${data.error || res.status}` }]);
+        return;
+      }
+      const reply = data.content?.filter(b => b.type==="text").map(b => b.text).join("\n") || JSON.stringify(data);
       setMessages(m => [...m, { role:"assistant", content:reply }]);
     } catch (err) {
-      setMessages(m => [...m, { role:"assistant", content:"API error. Check your key and try again." }]);
+      setMessages(m => [...m, { role:"assistant", content:`Error: ${err.message}` }]);
     } finally {
       setLoading(false);
     }
