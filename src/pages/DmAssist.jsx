@@ -328,7 +328,7 @@ export default function DmAssist({ onNavigate }) {
         method: "POST",
         headers: { "Content-Type":"application/json" },
         body: JSON.stringify({
-          model:      "claude-sonnet-4-5",
+          model:      "claude-sonnet-4-6",
           max_tokens: 1500,
           system:     SYSTEM_PROMPT,
           messages:   next,
