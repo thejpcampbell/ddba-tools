@@ -1,8 +1,8 @@
 import { useState } from "react";
 import Hub from "./components/Hub.jsx";
-import SetterLive from "./pages/SetterLive.jsx";
-import CloserLive from "./pages/CloserLive.jsx";
-import DmAssist from "./pages/DmAssist.jsx";
+import SetterLive from "./pages/SetterLive/index.jsx";
+import CloserLive from "./pages/CloserLive/index.jsx";
+import DmAssist from "./pages/DmAssist/index.jsx";
 
 export default function App() {
   const [page, setPage] = useState("hub");

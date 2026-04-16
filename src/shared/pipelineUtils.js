@@ -1,7 +1,7 @@
 // shared/pipelineUtils.js
 // Shared utilities used by both SetterLive and CloserLive
 
-const CLOSER_PIPE_KEY = "closer:jp:pipeline";
+import { PIPE_KEY as CLOSER_PIPE_KEY } from "../pages/CloserLive/constants.js";
 
 async function apiGet(key) {
   try {
