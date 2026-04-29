@@ -44,6 +44,10 @@ export default function CloserEOD({ pipeline, history, onHistoryUpdate }) {
   const [reportTxt, setReportTxt] = useState("");
   const [showReport, setShowReport] = useState(false);
   const [cuStatus, setCuStatus] = useState(null); // null | "loading" | "done" | "error"
+  const [reportDate, setReportDate] = useState(TODAY);
+
+  const toInputDate = (d) => { const [m, dd, y] = d.split('/'); return `${y}-${m}-${dd}`; };
+  const fromInputDate = (v) => { const [y, m, d] = v.split('-'); return `${m}/${d}/${y}`; };
 
   useEffect(() => {
     apiGet(eodKey).then((d) => {
@@ -170,7 +174,7 @@ export default function CloserEOD({ pipeline, history, onHistoryUpdate }) {
         `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
         `DDBA // CLOSER EOD REPORT`,
         `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-        `Date:           ${TODAY}`,
+        `Date:           ${reportDate}`,
         `Closer:         JP Campbell`,
         ``,
         `━━ CALL ACTIVITY ━━━━━━━━━━━━━━━━━━━━━━━`,
@@ -213,7 +217,7 @@ export default function CloserEOD({ pipeline, history, onHistoryUpdate }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           listId: CLICKUP_LIST_ID,
-          name: `EOD Report — JP — ${TODAY}`,
+          name: `EOD Report — JP — ${reportDate}`,
           description: reportTxt,
         }),
       });
@@ -245,6 +249,40 @@ export default function CloserEOD({ pipeline, history, onHistoryUpdate }) {
   return (
     <div style={{ maxWidth: 980, margin: "0 auto", padding: "28px 24px" }}>
       <JPView />
+      {/* Date bar */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          gap: 10,
+          marginBottom: 20,
+          fontFamily: "'DM Mono',monospace",
+          fontSize: 11,
+          letterSpacing: "0.1em",
+        }}
+      >
+        <span style={{ color: C.t2, fontWeight: 700 }}>REPORT DATE</span>
+        <input
+          type="date"
+          value={toInputDate(reportDate)}
+          onChange={(e) => setReportDate(fromInputDate(e.target.value))}
+          style={{
+            background: C.goldDim,
+            border: `1.5px solid ${C.goldBorder}`,
+            borderRadius: 5,
+            color: C.gold,
+            fontFamily: "'DM Mono',monospace",
+            fontSize: 13,
+            fontWeight: 700,
+            padding: "5px 10px",
+            letterSpacing: "0.08em",
+            cursor: "pointer",
+            boxShadow: `0 0 10px rgba(0,170,255,0.2)`,
+            outline: "none",
+          }}
+        />
+      </div>
       <SL>Pipeline Funnel — Today</SL>
       <div style={{ marginBottom: 10 }}>
         <CloserFunnel pipeline={pipeline} />

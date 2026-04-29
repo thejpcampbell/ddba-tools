@@ -43,6 +43,10 @@ export default function SetterView({ rep }) {
   const [reportTxt, setReportTxt] = useState("");
   const [showReport, setShowReport] = useState(false);
   const [cuStatus, setCuStatus] = useState(null); // null | "loading" | "done" | "error"
+  const [reportDate, setReportDate] = useState(TODAY);
+
+  const toInputDate = (d) => { const [m, dd, y] = d.split('/'); return `${y}-${m}-${dd}`; };
+  const fromInputDate = (v) => { const [y, m, d] = v.split('-'); return `${m}/${d}/${y}`; };
 
   // Load
   useEffect(() => {
@@ -168,7 +172,7 @@ export default function SetterView({ rep }) {
         `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
         `DDBA // SETTER EOD REPORT`,
         `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
-        `Date:       ${TODAY}`,
+        `Date:       ${reportDate}`,
         `DM Setter:  ${rep}`,
         ``,
         `━━ KEYWORDS ━━━━━━━━━━━━━━━━━━━━━━━━━━━━`,
@@ -208,7 +212,7 @@ export default function SetterView({ rep }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           listId: CLICKUP_LIST_ID,
-          name: `EOD Report — ${rep} — ${TODAY}`,
+          name: `EOD Report — ${rep} — ${reportDate}`,
           description: reportTxt,
         }),
       });
@@ -286,11 +290,33 @@ export default function SetterView({ rep }) {
         />
         <span style={{ color: C.t2 }}>LIVE</span>
         <span style={{ color: C.t4 }}>— SYNCED FROM PIPELINE</span>
-        {syncTime && (
-          <span style={{ marginLeft: "auto", color: C.t4 }}>
-            Last sync: {syncTime}
+        <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", gap: 10 }}>
+          <span style={{ fontFamily: "'DM Mono',monospace", fontSize: 11, letterSpacing: "0.12em", color: C.t2, fontWeight: 700 }}>
+            REPORT DATE
           </span>
-        )}
+          <input
+            type="date"
+            value={toInputDate(reportDate)}
+            onChange={(e) => setReportDate(fromInputDate(e.target.value))}
+            style={{
+              background: C.goldDim,
+              border: `1.5px solid ${C.goldBorder}`,
+              borderRadius: 5,
+              color: C.gold,
+              fontFamily: "'DM Mono',monospace",
+              fontSize: 13,
+              fontWeight: 700,
+              padding: "5px 10px",
+              letterSpacing: "0.08em",
+              cursor: "pointer",
+              boxShadow: `0 0 10px rgba(0,170,255,0.2)`,
+              outline: "none",
+            }}
+          />
+          {syncTime && (
+            <span style={{ color: C.t4 }}>Last sync: {syncTime}</span>
+          )}
+        </div>
       </div>
 
       {/* Funnel */}
@@ -577,7 +603,7 @@ export default function SetterView({ rep }) {
           </div>
         </NbCard>
       </div>
-      <div style={{ marginBottom: 12 }}>
+      <div style={{ ...G2, marginBottom: 28 }}>
         <NbCard label="#1 Reason Prospects Didn't Book Today">
           <input
             style={NBI}
@@ -586,8 +612,6 @@ export default function SetterView({ rep }) {
             placeholder="What was the actual pattern? Be specific."
           />
         </NbCard>
-      </div>
-      <div style={{ marginBottom: 28 }}>
         <NbCard label="⚡ One Fix for Tomorrow" gold>
           <textarea
             style={{ ...NBTA, fontSize: 15 }}
